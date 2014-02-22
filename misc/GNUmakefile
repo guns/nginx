@@ -37,7 +37,8 @@ release: export
 
 export:
 	rm -rf $(TEMP)
-	hg archive -X '.hg*' $(TEMP)/$(NGINX)
+	mkdir -p $(TEMP)/$(NGINX)
+	git archive HEAD . | tar x -C $(TEMP)/$(NGINX)
 
 
 RELEASE:

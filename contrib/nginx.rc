@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+NAME='nginx'
+PROGRAM=%%NGX_SBIN_PATH%%
+PIDFILE=%%NGX_PID_PATH%%
+OPTIONS=()
+
+run() { echo "$@"; "$@"; }
+alive() { [[ -e "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" &>/dev/null; }
+
+start() {
+    if alive; then
+        echo "$NAME is already running."
+        return 1
+    elif ! "$PROGRAM" -t; then
+        return 1
+    else
+        run "$PROGRAM" "${OPTIONS[@]}"
+    fi
+}
+
+stop() {
+    if alive; then
+        run "$PROGRAM" -s quit
+    else
+        echo "$NAME is not running."
+        return 1
+    fi
+}
+
+restart() {
+    if alive; then
+        run "$PROGRAM" -s reload
+    else
+        start
+    fi
+}
+
+case $1 in
+start)   start;;
+stop)    stop;;
+restart) restart;;
+*)       echo "Usage: ${0##*/} start|stop|restart"; exit 1
+esac
+
+# vim:ft=sh
