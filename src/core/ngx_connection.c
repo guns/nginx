@@ -97,7 +97,7 @@ ngx_set_inherited_sockets(ngx_cycle_t *cycle)
     ngx_uint_t                 i;
     ngx_listening_t           *ls;
     socklen_t                  olen;
-#if (NGX_HAVE_DEFERRED_ACCEPT)
+#if (NGX_HAVE_DEFERRED_ACCEPT || NGX_HAVE_TCP_FASTOPEN)
     ngx_err_t                  err;
 #endif
 #if (NGX_HAVE_DEFERRED_ACCEPT && defined SO_ACCEPTFILTER)
@@ -199,7 +199,9 @@ ngx_set_inherited_sockets(ngx_cycle_t *cycle)
 
 #if (NGX_HAVE_SETFIB)
 
-        if (getsockopt(ls[i].setfib, SOL_SOCKET, SO_SETFIB,
+        olen = sizeof(int);
+
+        if (getsockopt(ls[i].fd, SOL_SOCKET, SO_SETFIB,
                        (void *) &ls[i].setfib, &olen)
             == -1)
         {
@@ -215,13 +217,19 @@ ngx_set_inherited_sockets(ngx_cycle_t *cycle)
 
 #if (NGX_HAVE_TCP_FASTOPEN)
 
-        if (getsockopt(ls[i].fastopen, IPPROTO_TCP, TCP_FASTOPEN,
+        olen = sizeof(int);
+
+        if (getsockopt(ls[i].fd, IPPROTO_TCP, TCP_FASTOPEN,
                        (void *) &ls[i].fastopen, &olen)
             == -1)
         {
-            ngx_log_error(NGX_LOG_ALERT, cycle->log, ngx_socket_errno,
-                          "getsockopt(TCP_FASTOPEN) %V failed, ignored",
-                          &ls[i].addr_text);
+            err = ngx_socket_errno;
+
+            if (err != NGX_EOPNOTSUPP && err != NGX_ENOPROTOOPT) {
+                ngx_log_error(NGX_LOG_NOTICE, cycle->log, err,
+                              "getsockopt(TCP_FASTOPEN) %V failed, ignored",
+                              &ls[i].addr_text);
+            }
 
             ls[i].fastopen = -1;
         }
@@ -697,7 +705,13 @@ ngx_configure_listening_sockets(ngx_cycle_t *cycle)
         if (ls[i].add_deferred || ls[i].delete_deferred) {
 
             if (ls[i].add_deferred) {
-                value = (int) (ls[i].post_accept_timeout / 1000);
+                /*
+                 * There is no way to find out how long a connection was
+                 * in queue (and a connection may bypass deferred queue at all
+                 * if syncookies were used), hence we use 1 second timeout
+                 * here.
+                 */
+                value = 1;
 
             } else {
                 value = 0;
