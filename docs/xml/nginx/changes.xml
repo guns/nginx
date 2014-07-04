@@ -5,6 +5,483 @@
 <change_log title="nginx">
 
 
+<changes ver="1.7.2" date="17.06.2014">
+
+<change type="feature">
+<para lang="ru">
+директива hash в блоке upstream.
+</para>
+<para lang="en">
+the "hash" directive inside the "upstream" block.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+дефрагментация свободных блоков разделяемой памяти.<br/>
+Спасибо Wandenberg Peixoto и Yichun Zhang.
+</para>
+<para lang="en">
+defragmentation of free shared memory blocks.<br/>
+Thanks to Wandenberg Peixoto and Yichun Zhang.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в рабочем процессе мог произойти segmentation fault,
+если использовалось значение access_log по умолчанию;
+ошибка появилась в 1.7.0.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+a segmentation fault might occur in a worker process
+if the default value of the "access_log" directive was used;
+the bug had appeared in 1.7.0.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+завершающий слэш ошибочно удалялся
+из последнего параметра директивы try_files.
+</para>
+<para lang="en">
+trailing slash was mistakenly removed
+from the last parameter of the "try_files" directive.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+nginx мог не собираться на OS X.
+</para>
+<para lang="en">
+nginx could not be built on OS X in some cases.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в модуле ngx_http_spdy_module.
+</para>
+<para lang="en">
+in the ngx_http_spdy_module.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.1" date="27.05.2014">
+
+<change type="feature">
+<para lang="ru">
+переменные "$upstream_cookie_...".
+</para>
+<para lang="en">
+the "$upstream_cookie_..." variables.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+переменная $ssl_client_fingerprint.
+</para>
+<para lang="en">
+the $ssl_client_fingerprint variable.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директивы error_log и access_log теперь поддерживают логгирование в syslog.
+</para>
+<para lang="en">
+the "error_log" and "access_log" directives now support logging to syslog.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+почтовый прокси-сервер теперь логгирует порт клиента при соединении.
+</para>
+<para lang="en">
+the mail proxy now logs client port on connect.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+утечки памяти при использовании директивы "ssl_stapling".<br/>
+Спасибо Filipe da Silva.
+</para>
+<para lang="en">
+memory leak if the "ssl_stapling" directive was used.<br/>
+Thanks to Filipe da Silva.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+директива alias внутри location'а, заданного регулярным выражением,
+работала неправильно, если использовались директивы if или limit_except.
+</para>
+<para lang="en">
+the "alias" directive used inside a location given by a regular expression
+worked incorrectly if the "if" or "limit_except" directives were used.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+директива charset не ставила кодировку для сжатых ответов бэкендов.
+</para>
+<para lang="en">
+the "charset" directive did not set a charset to encoded backend responses.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+директива proxy_pass без URI могла использовать оригинальный запрос
+после установки переменной $args.<br/>
+Спасибо Yichun Zhang.
+</para>
+<para lang="en">
+a "proxy_pass" directive without URI part might use original request
+after the $args variable was set.<br/>
+Thanks to Yichun Zhang.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в работе параметра none директивы smtp_auth;
+ошибка появилась в 1.5.6.<br/>
+Спасибо Святославу Никольскому.
+</para>
+<para lang="en">
+in the "none" parameter in the "smtp_auth" directive;
+the bug had appeared in 1.5.6.<br/>
+Thanks to Svyatoslav Nikolsky.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при совместном использовании sub_filter и SSI
+ответы могли передаваться неверно.
+</para>
+<para lang="en">
+if sub_filter and SSI were used together,
+then responses might be transferred incorrectly.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+nginx не собирался с параметром --with-file-aio на Linux/aarch64.
+</para>
+<para lang="en">
+nginx could not be built with the --with-file-aio option on Linux/aarch64.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.0" date="24.04.2014">
+
+<change type="feature">
+<para lang="ru">
+проверка SSL-сертификатов бэкендов.
+</para>
+<para lang="en">
+backend SSL certificate verification.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+поддержка SNI при работе с бэкендами по SSL.
+</para>
+<para lang="en">
+support for SNI while working with SSL backends.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+переменная $ssl_server_name.
+</para>
+<para lang="en">
+the $ssl_server_name variable.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+параметр if директивы access_log.
+</para>
+<para lang="en">
+the "if" parameter of the "access_log" directive.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.5.13" date="08.04.2014">
+
+<change type="change">
+<para lang="ru">
+улучшена обработка хэш-таблиц;
+в директивах variables_hash_max_size и types_hash_bucket_size
+значения по умолчанию изменены на 1024 и 64 соответственно.
+</para>
+<para lang="en">
+improved hash table handling;
+the default values of the "variables_hash_max_size" and
+"types_hash_bucket_size" were changed to 1024 and 64 respectively.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+модуль ngx_http_mp4_module теперь понимает аргумент end.
+</para>
+<para lang="en">
+the ngx_http_mp4_module now supports the "end" argument.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+поддержка byte ranges модулем ngx_http_mp4_module и при сохранении
+ответов в кэш.
+</para>
+<para lang="en">
+byte ranges support in the ngx_http_mp4_module and while saving responses
+to cache.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+теперь nginx не пишет в лог сообщения "ngx_slab_alloc() failed: no memory"
+при использовании разделяемой памяти в ssl_session_cache
+и в модуле ngx_http_limit_req_module.
+</para>
+<para lang="en">
+alerts "ngx_slab_alloc() failed: no memory" no longer logged
+when using shared memory in the "ssl_session_cache" directive
+and in the ngx_http_limit_req_module.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+директива underscores_in_headers
+не разрешала подчёркивание в первом символе заголовка.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+the "underscores_in_headers" directive
+did not allow underscore as a first character of a header.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+cache manager мог нагружать процессор при выходе в nginx/Windows.
+</para>
+<para lang="en">
+cache manager might hog CPU on exit in nginx/Windows.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при использовании ssl_session_cache с параметром shared
+рабочий процесс nginx/Windows завершался аварийно.
+</para>
+<para lang="en">
+nginx/Windows terminated abnormally
+if the "ssl_session_cache" directive was used with the "shared" parameter.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в модуле ngx_http_spdy_module.
+</para>
+<para lang="en">
+in the ngx_http_spdy_module.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.5.12" date="18.03.2014">
+
+<change type="security">
+<para lang="ru">
+при обработке специально созданного запроса модулем ngx_http_spdy_module
+могло происходить переполнение буфера в рабочем процессе,
+что потенциально могло приводить к выполнению произвольного кода
+(CVE-2014-0133).<br/>
+Спасибо Lucas Molas из Programa STIC, Fundación Dr. Manuel
+Sadosky, Buenos Aires, Argentina.
+</para>
+<para lang="en">
+a heap memory buffer overflow might occur in a worker process 
+while handling a specially crafted request by ngx_http_spdy_module,
+potentially resulting in arbitrary code execution
+(CVE-2014-0133).<br/>
+Thanks to Lucas Molas, researcher at Programa STIC, Fundación Dr. Manuel
+Sadosky, Buenos Aires, Argentina.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+параметр proxy_protocol в директивах listen и real_ip_header,
+переменная $proxy_protocol_addr.
+</para>
+<para lang="en">
+the "proxy_protocol" parameters of the "listen" and "real_ip_header" directives,
+the $proxy_protocol_addr variable.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в директиве fastcgi_next_upstream.<br/>
+Спасибо Lucas Molas.
+</para>
+<para lang="en">
+in the "fastcgi_next_upstream" directive.<br/>
+Thanks to Lucas Molas.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.5.11" date="04.03.2014">
+
+<change type="security">
+<para lang="ru">
+при обработке специально созданного запроса модулем ngx_http_spdy_module
+на 32-битных платформах могла повреждаться память рабочего процесса,
+что потенциально могло приводить к выполнению произвольного кода
+(CVE-2014-0088);
+ошибка появилась в 1.5.10.<br/>
+Спасибо Lucas Molas из Programa STIC, Fundación Dr. Manuel
+Sadosky, Buenos Aires, Argentina.
+</para>
+<para lang="en">
+memory corruption might occur in a worker process on 32-bit platforms
+while handling a specially crafted request by ngx_http_spdy_module,
+potentially resulting in arbitrary code execution (CVE-2014-0088);
+the bug had appeared in 1.5.10.<br/>
+Thanks to Lucas Molas, researcher at Programa STIC, Fundación Dr. Manuel
+Sadosky, Buenos Aires, Argentina.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+переменная $ssl_session_reused.
+</para>
+<para lang="en">
+the $ssl_session_reused variable.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+директива client_max_body_size могла не работать
+при чтении тела запроса с использованием chunked transfer encoding;
+ошибка появилась в 1.3.9.<br/>
+Спасибо Lucas Molas.
+</para>
+<para lang="en">
+the "client_max_body_size" directive might not work
+when reading a request body using chunked transfer encoding;
+the bug had appeared in 1.3.9.<br/>
+Thanks to Lucas Molas.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при проксировании WebSocket-соединений
+в рабочем процессе мог произойти segmentation fault.
+</para>
+<para lang="en">
+a segmentation fault might occur in a worker process
+when proxying WebSocket connections.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в рабочем процессе мог произойти segmentation fault,
+если использовался модуль ngx_http_spdy_module на 32-битных платформах;
+ошибка появилась в 1.5.10.
+</para>
+<para lang="en">
+a segmentation fault might occur in a worker process
+if the ngx_http_spdy_module was used on 32-bit platforms;
+the bug had appeared in 1.5.10.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+значение переменной $upstream_status могло быть неверным,
+если использовались директивы proxy_cache_use_stale
+или proxy_cache_revalidate.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+the $upstream_status variable might contain wrong data
+if the "proxy_cache_use_stale" or "proxy_cache_revalidate" directives
+were used.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в рабочем процессе мог произойти segmentation fault,
+если ошибки с кодом 400 с помощью директивы error_page
+перенаправлялись в именованный location.
+</para>
+<para lang="en">
+a segmentation fault might occur in a worker process
+if errors with code 400 were redirected to a named location
+using the "error_page" directive.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+nginx/Windows не собирался с Visual Studio 2013.
+</para>
+<para lang="en">
+nginx/Windows could not be built with Visual Studio 2013.
+</para>
+</change>
+
+</changes>
+
+
 <changes ver="1.5.10" date="04.02.2014">
 
 <change type="feature">
@@ -424,7 +901,7 @@ in error handling in ngx_http_gunzip_filter_module.
 
 <change type="bugfix">
 <para lang="ru">
-ответы могли зависать
+ответы могли зависать,
 если использовался модуль ngx_http_spdy_module
 и директива auth_request.
 </para>
@@ -2044,7 +2521,7 @@ the "single" parameter of the "keepalive" directive is now ignored.
 <change type="change">
 <para lang="ru">
 сжатие SSL теперь отключено
-в том числе при использовании OpenSSL cтарее 1.0.0.
+в том числе при использовании OpenSSL старее 1.0.0.
 </para>
 <para lang="en">
 SSL compression is now disabled when using all versions of OpenSSL,
@@ -20781,7 +21258,7 @@ the %3F symbol in the URI was considered as the argument string start.
 
 <change type="feature">
 <para lang="ru">
-поддержка unix domain сoкетов в модуле ngx_http_proxy_module.
+поддержка unix domain сокетов в модуле ngx_http_proxy_module.
 </para>
 <para lang="en">
 the unix domain sockets support in the ngx_http_proxy_module.
