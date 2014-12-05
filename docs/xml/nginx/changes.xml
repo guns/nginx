@@ -5,6 +5,681 @@
 <change_log title="nginx">
 
 
+<changes ver="1.7.8" date="02.12.2014">
+
+<change type="change">
+<para lang="ru">
+теперь строки "If-Modified-Since", "If-Range" и им подобные
+в заголовке запроса клиента передаются бэкенду при включённом кэшировании,
+если nginx заранее знает, что не будет кэшировать ответ
+(например, при использовании proxy_cache_min_uses).
+</para>
+<para lang="en">
+now the "If-Modified-Since", "If-Range", etc.
+client request header lines are passed to a backend while caching
+if nginx knows in advance that the response will not be cached
+(e.g., when using proxy_cache_min_uses).
+</para>
+</change>
+
+<change type="change">
+<para lang="ru">
+теперь после истечения proxy_cache_lock_timeout
+nginx отправляет запрос на бэкенд без кэширования;
+новые директивы proxy_cache_lock_age, fastcgi_cache_lock_age,
+scgi_cache_lock_age и uwsgi_cache_lock_age позволяют указать,
+через какое время блокировка будет принудительно снята
+и будет сделана ещё одна попытка закэшировать ответ.
+</para>
+<para lang="en">
+now after proxy_cache_lock_timeout
+nginx sends a request to a backend with caching disabled;
+the new directives "proxy_cache_lock_age", "fastcgi_cache_lock_age",
+"scgi_cache_lock_age", and "uwsgi_cache_lock_age" specify a time
+after which the lock will be released
+and another attempt to cache a response will be made.
+</para>
+</change>
+
+<change type="change">
+<para lang="ru">
+директива log_format теперь может использоваться только на уровне http.
+</para>
+<para lang="en">
+the "log_format" directive can now be used only at http level.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директивы proxy_ssl_certificate, proxy_ssl_certificate_key,
+proxy_ssl_password_file, uwsgi_ssl_certificate,
+uwsgi_ssl_certificate_key и uwsgi_ssl_password_file.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+the "proxy_ssl_certificate", "proxy_ssl_certificate_key",
+"proxy_ssl_password_file", "uwsgi_ssl_certificate",
+"uwsgi_ssl_certificate_key", and "uwsgi_ssl_password_file" directives.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+теперь с помощью X-Accel-Redirect
+можно перейти в именованный location.<br/>
+Спасибо Toshikuni Fukaya.
+</para>
+<para lang="en">
+it is now possible to switch to a named location
+using "X-Accel-Redirect".<br/>
+Thanks to Toshikuni Fukaya.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+теперь директива tcp_nodelay работает для SPDY-соединений.
+</para>
+<para lang="en">
+now the "tcp_nodelay" directive works with SPDY connections.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+новые директивы в скриптах подсветки синтаксиса для vim.<br/>
+Спасибо Peter Wu.
+</para>
+<para lang="en">
+new directives in vim syntax highliting scripts.<br/>
+Thanks to Peter Wu.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+nginx игнорировал значение "s-maxage"
+в строке "Cache-Control" в заголовке ответа бэкенда.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+nginx ignored the "s-maxage" value
+in the "Cache-Control" backend response header line.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в модуле ngx_http_spdy_module.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+in the ngx_http_spdy_module.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в директиве ssl_password_file
+при использовании OpenSSL 0.9.8zc, 1.0.0o, 1.0.1j.
+</para>
+<para lang="en">
+in the "ssl_password_file" directive
+when using OpenSSL 0.9.8zc, 1.0.0o, 1.0.1j.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при использовании директивы post_action
+в лог писались сообщения "header already sent";
+ошибка появилась в nginx 1.5.4.
+</para>
+<para lang="en">
+alerts "header already sent" appeared in logs
+if the "post_action" directive was used;
+the bug had appeared in 1.5.4.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при использовании директивы "postpone_output 0" с SSI-подзапросами
+в лог могли писаться сообщения "the http output chain is empty".
+</para>
+<para lang="en">
+alerts "the http output chain is empty" might appear in logs
+if the "postpone_output 0" directive was used with SSI includes.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в директиве proxy_cache_lock при использовании SSI-подзапросов.<br/>
+Спасибо Yichun Zhang.
+</para>
+<para lang="en">
+in the "proxy_cache_lock" directive with SSI subrequests.<br/>
+Thanks to Yichun Zhang.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.7" date="28.10.2014">
+
+<change type="change">
+<para lang="ru">
+теперь nginx учитывает при кэшировании строку "Vary"
+в заголовке ответа бэкенда.
+</para>
+<para lang="en">
+now nginx takes into account the "Vary"
+header line in a backend response while caching.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директивы proxy_force_ranges, fastcgi_force_ranges,
+scgi_force_ranges и uwsgi_force_ranges.
+</para>
+<para lang="en">
+the "proxy_force_ranges", "fastcgi_force_ranges",
+"scgi_force_ranges", and "uwsgi_force_ranges" directives.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директивы proxy_limit_rate, fastcgi_limit_rate,
+scgi_limit_rate и uwsgi_limit_rate.
+</para>
+<para lang="en">
+the "proxy_limit_rate", "fastcgi_limit_rate",
+"scgi_limit_rate", and "uwsgi_limit_rate" directives.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+параметр Vary директив proxy_ignore_headers, fastcgi_ignore_headers,
+scgi_ignore_headers и uwsgi_ignore_headers.
+</para>
+<para lang="en">
+the "Vary" parameter of the "proxy_ignore_headers", "fastcgi_ignore_headers",
+"scgi_ignore_headers", and "uwsgi_ignore_headers" directives.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+последняя часть ответа, полученного от бэкенда
+при небуферизированном проксировании,
+могла не отправляться клиенту,
+если использовались директивы gzip или gunzip.
+</para>
+<para lang="en">
+the last part of a response received from a backend
+with unbufferred proxy
+might not be sent to a client
+if "gzip" or "gunzip" directives were used.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в директиве proxy_cache_revalidate.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+in the "proxy_cache_revalidate" directive.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в обработке ошибок.<br/>
+Спасибо Yichun Zhang и Даниилу Бондареву.
+</para>
+<para lang="en">
+in error handling.<br/>
+Thanks to Yichun Zhang and Daniil Bondarev.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в директивах
+proxy_next_upstream_tries и proxy_next_upstream_timeout.<br/>
+Спасибо Feng Gu.
+</para>
+<para lang="en">
+in the "proxy_next_upstream_tries" and "proxy_next_upstream_timeout"
+directives.<br/>
+Thanks to Feng Gu.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+nginx/Windows не собирался с MinGW-w64 gcc.<br/>
+Спасибо Kouhei Sutou.
+</para>
+<para lang="en">
+nginx/Windows could not be built with MinGW-w64 gcc.<br/>
+Thanks to Kouhei Sutou.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.6" date="30.09.2014">
+
+<change type="change">
+<para lang="ru">
+устаревшая директива limit_zone больше не поддерживается.
+</para>
+<para lang="en">
+the deprecated "limit_zone" directive is not supported anymore.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+в директивах limit_conn_zone и limit_req_zone теперь можно использовать
+комбинации нескольких переменных.
+</para>
+<para lang="en">
+the "limit_conn_zone" and "limit_req_zone" directives now can be used
+with combinations of multiple variables.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при повторной отправке FastCGI-запроса на бэкенд
+тело запроса могло передаваться неправильно.
+</para>
+<para lang="en">
+request body might be transmitted incorrectly
+when retrying a FastCGI request to the next upstream server.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в логгировании в syslog.
+</para>
+<para lang="en">
+in logging to syslog.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.5" date="16.09.2014">
+
+<change type="security">
+<para lang="ru">
+при использовании общего для нескольких блоков server
+разделяемого кэша SSL-сессий или общего ключа для шифрования
+TLS session tickets было возможно повторно использовать
+SSL-сессию в контексте другого блока server (CVE-2014-3616).<br/>
+Спасибо Antoine Delignat-Lavaud.
+</para>
+<para lang="en">
+it was possible to reuse SSL sessions in unrelated contexts
+if a shared SSL session cache or the same TLS session ticket key
+was used for multiple "server" blocks (CVE-2014-3616).<br/>
+Thanks to Antoine Delignat-Lavaud.
+</para>
+</change>
+
+<change type="change">
+<para lang="ru">
+директиву stub_status теперь можно указывать без параметров.
+</para>
+<para lang="en">
+now the "stub_status" directive does not require a parameter.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+параметр always директивы add_header.
+</para>
+<para lang="en">
+the "always" parameter of the "add_header" directive.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директивы
+proxy_next_upstream_tries, proxy_next_upstream_timeout,
+fastcgi_next_upstream_tries, fastcgi_next_upstream_timeout,
+memcached_next_upstream_tries, memcached_next_upstream_timeout,
+scgi_next_upstream_tries, scgi_next_upstream_timeout,
+uwsgi_next_upstream_tries и uwsgi_next_upstream_timeout.
+</para>
+<para lang="en">
+the
+"proxy_next_upstream_tries", "proxy_next_upstream_timeout",
+"fastcgi_next_upstream_tries", "fastcgi_next_upstream_timeout",
+"memcached_next_upstream_tries", "memcached_next_upstream_timeout",
+"scgi_next_upstream_tries", "scgi_next_upstream_timeout",
+"uwsgi_next_upstream_tries", and "uwsgi_next_upstream_timeout"
+directives.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в параметре if директивы access_log.
+</para>
+<para lang="en">
+in the "if" parameter of the "access_log" directive.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в модуле ngx_http_perl_module.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+in the ngx_http_perl_module.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+директива listen почтового прокси-сервера
+не позволяла указать более двух параметров.
+</para>
+<para lang="en">
+the "listen" directive of the mail proxy module
+did not allow to specify more than two parameters.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+директива sub_filter не работала
+с заменяемой строкой из одного символа.
+</para>
+<para lang="en">
+the "sub_filter" directive did not work
+with a string to replace consisting of a single character.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+запросы могли зависать, если использовался resolver
+и в процессе обращения к DNS-серверу происходил таймаут.
+</para>
+<para lang="en">
+requests might hang if resolver was used
+and a timeout occurred during a DNS request.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в модуле ngx_http_spdy_module при использовании совместно с AIO.
+</para>
+<para lang="en">
+in the ngx_http_spdy_module when using with AIO.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в рабочем процессе мог произойти segmentation fault,
+если с помощью директивы set изменялись переменные
+"$http_...", "$sent_http_..." или "$upstream_http_...".
+</para>
+<para lang="en">
+a segmentation fault might occur in a worker process
+if the "set" directive was used to change the "$http_...",
+"$sent_http_...", or "$upstream_http_..." variables.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в обработке ошибок выделения памяти.<br/>
+Спасибо Markus Linnala и Feng Gu.
+</para>
+<para lang="en">
+in memory allocation error handling.<br/>
+Thanks to Markus Linnala and Feng Gu.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.4" date="05.08.2014">
+
+<change type="security">
+<para lang="ru">
+pipelined-команды не отбрасывались
+после команды STARTTLS в SMTP прокси-сервере (CVE-2014-3556);
+ошибка появилась в 1.5.6.<br/>
+Спасибо Chris Boulton.
+</para>
+<para lang="en">
+pipelined commands were not discarded
+after STARTTLS command in SMTP proxy (CVE-2014-3556);
+the bug had appeared in 1.5.6.<br/>
+Thanks to Chris Boulton.
+</para>
+</change>
+
+<change type="change">
+<para lang="ru">
+экранирование символов в URI теперь использует
+шестнадцатеричные цифры в верхнем регистре.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+URI escaping now uses
+uppercase hexadecimal digits.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+теперь nginx можно собрать с BoringSSL и LibreSSL.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+now nginx can be build with BoringSSL and LibreSSL.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+запросы могли зависать, если использовался resolver
+и DNS-сервер возвращал некорректный ответ;
+ошибка появилась в 1.5.8.
+</para>
+<para lang="en">
+requests might hang if resolver was used
+and a DNS server returned a malformed response;
+the bug had appeared in 1.5.8.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в модуле ngx_http_spdy_module.<br/>
+Спасибо Piotr Sikora.
+</para>
+<para lang="en">
+in the ngx_http_spdy_module.<br/>
+Thanks to Piotr Sikora.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+переменная $uri могла содержать мусор
+при возврате ошибок с кодом 400.<br/>
+Спасибо Сергею Боброву.
+</para>
+<para lang="en">
+the $uri variable might contain garbage
+when returning errors with code 400.<br/>
+Thanks to Sergey Bobrov.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в обработке ошибок в директиве proxy_store
+и в модуле ngx_http_dav_module.<br/>
+Спасибо Feng Gu.
+</para>
+<para lang="en">
+in error handling in the "proxy_store" directive
+and the ngx_http_dav_module.<br/>
+Thanks to Feng Gu.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при логгировании ошибок в syslog мог происходить segmentation fault;
+ошибка появилась в 1.7.1.
+</para>
+<para lang="en">
+a segmentation fault might occur if logging of errors to syslog was used;
+the bug had appeared in 1.7.1.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+переменные $geoip_latitude, $geoip_longitude, $geoip_dma_code
+и $geoip_area_code могли не работать.<br/>
+Спасибо Yichun Zhang.
+</para>
+<para lang="en">
+the $geoip_latitude, $geoip_longitude, $geoip_dma_code,
+and $geoip_area_code variables might not work.<br/>
+Thanks to Yichun Zhang.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в обработке ошибок выделения памяти.<br/>
+Спасибо Tatsuhiko Kubo и Piotr Sikora.
+</para>
+<para lang="en">
+in memory allocation error handling.<br/>
+Thanks to Tatsuhiko Kubo and Piotr Sikora.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.3" date="08.07.2014">
+
+<change type="feature">
+<para lang="ru">
+weak entity tags теперь не удаляются при изменениях ответа,
+а strong entity tags преобразуются в weak.
+</para>
+<para lang="en">
+weak entity tags are now preserved on response modifications,
+and strong ones are changed to weak.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+ревалидация элементов кэша теперь, если это возможно,
+использует заголовок If-None-Match.
+</para>
+<para lang="en">
+cache revalidation now uses If-None-Match header
+if possible.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директива ssl_password_file.
+</para>
+<para lang="en">
+the "ssl_password_file" directive.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при возврате ответа из кэша
+заголовок запроса If-None-Match игнорировался,
+если в ответе не было заголовка Last-Modified.
+</para>
+<para lang="en">
+the If-None-Match request header line was ignored
+if there was no Last-Modified header
+in a response returned from cache.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+сообщения "peer closed connection in SSL handshake"
+при соединении с бэкендами логгировались на уровне info вместо error.
+</para>
+<para lang="en">
+"peer closed connection in SSL handshake" messages
+were logged at "info" level instead of "error" while connecting to backends.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в модуле ngx_http_dav_module в nginx/Windows.
+</para>
+<para lang="en">
+in the ngx_http_dav_module module in nginx/Windows.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+SPDY-соединения могли неожиданно закрываться,
+если использовалось кэширование.
+</para>
+<para lang="en">
+SPDY connections might be closed prematurely
+if caching was used.
+</para>
+</change>
+
+</changes>
+
+
 <changes ver="1.7.2" date="17.06.2014">
 
 <change type="feature">
@@ -338,7 +1013,7 @@ in the ngx_http_spdy_module.
 Sadosky, Buenos Aires, Argentina.
 </para>
 <para lang="en">
-a heap memory buffer overflow might occur in a worker process 
+a heap memory buffer overflow might occur in a worker process
 while handling a specially crafted request by ngx_http_spdy_module,
 potentially resulting in arbitrary code execution
 (CVE-2014-0133).<br/>
@@ -636,7 +1311,7 @@ nginx incorrectly handled escaped "?" character in the "include" SSI command.
 
 <change type="bugfix">
 <para lang="ru">
-модуль ngx_http_dav_module не раскодировал целевой URI при 
+модуль ngx_http_dav_module не раскодировал целевой URI при
 обработке методов COPY и MOVE.
 </para>
 <para lang="en">
@@ -1331,7 +2006,7 @@ Thanks to Serguei Ivantsov.
 
 <change type="feature">
 <para lang="ru">
-директивы ssi_last_modified, sub_filter_last_modified и 
+директивы ssi_last_modified, sub_filter_last_modified и
 xslt_last_modified.<br/>
 Спасибо Алексею Колпакову.
 </para>
@@ -1619,7 +2294,7 @@ the mail proxy module now supports IPv6 backends.
 <change type="bugfix">
 <para lang="ru">
 при повторной отправке запроса на бэкенд
-тело запроса могло передаваться неправильно; 
+тело запроса могло передаваться неправильно;
 ошибка появилась в 1.3.9.<br/>
 Спасибо Piotr Sikora.
 </para>
@@ -1771,7 +2446,7 @@ Thanks to Apcera and CloudBees for sponsoring this work.
 Спасибо Louis Opter.
 </para>
 <para lang="en">
-the "auth_basic_user_file" directive supports "{SHA}" 
+the "auth_basic_user_file" directive supports "{SHA}"
 password encryption method.<br/>
 Thanks to Louis Opter.
 </para>
@@ -2977,7 +3652,7 @@ if they were used with IPv6 addresses.
 могли наследоваться некорректно.
 </para>
 <para lang="en">
-the "modern_browser" and "ancient_browser" directives 
+the "modern_browser" and "ancient_browser" directives
 might be inherited incorrectly.
 </para>
 </change>
@@ -3681,8 +4356,8 @@ Thanks to Yichun Zhang.
 
 <change type="bugfix">
 <para lang="ru">
-директива read_ahead могла не работать при использовании совместно с 
-try_files и open_file_cache. 
+директива read_ahead могла не работать при использовании совместно с
+try_files и open_file_cache.
 </para>
 <para lang="en">
 the "read_ahead" directive might not work combined with "try_files"
@@ -3905,7 +4580,7 @@ nginx could not be built on AIX.
 </para>
 <para lang="en">
 the ngx_http_limit_zone_module was renamed to the ngx_http_limit_conn_module.
-</para>          
+</para>
 </change>
 
 <change type="change">
@@ -4012,7 +4687,7 @@ Thanks to Kirill A. Korinskiy.
 ssl_certificate.
 </para>
 <para lang="en">
-a segmentation fault occurred on start or during reconfiguration 
+a segmentation fault occurred on start or during reconfiguration
 if the "ssl" directive was used at http level and there was
 no "ssl_certificate" defined.
 </para>
@@ -4122,7 +4797,7 @@ Thanks to Alexey Kuts.
 
 <change type="bugfix">
 <para lang="ru">
-директивы модуля ngx_http_rewrite_module, заданные на уровне server, 
+директивы модуля ngx_http_rewrite_module, заданные на уровне server,
 применялись повторно, если для запроса не находилось ни одного location'а.
 </para>
 <para lang="en">
@@ -5249,7 +5924,7 @@ the bug had appeared in 0.9.0.
 
 <change type="feature">
 <para lang="ru">
-поддержка строки "If-Unmodified-Since" в заголовке запросе клиента.
+поддержка строки "If-Unmodified-Since" в заголовке запроса клиента.
 </para>
 <para lang="en">
 the "If-Unmodified-Since" client request header line support.
@@ -10780,7 +11455,7 @@ the "proxy_ssl_session_reuse" directive.
 </para>
 <para lang="en">
 a "proxy_pass" directive without URI part might use original request
-after the "X-Accel-Redirect" redirection was used;
+after the "X-Accel-Redirect" redirection was used.
 </para>
 </change>
 
@@ -11480,7 +12155,7 @@ if keepalive was enabled.
 
 <change type="bugfix">
 <para lang="ru">
-nginx не обрабатывал ответ FastCGI-сервера, если строка заголовка ответ была
+nginx не обрабатывал ответ FastCGI-сервера, если строка заголовка ответа была
 в конце записи FastCGI;
 ошибка появилась в 0.6.2.<br/>
 Спасибо Сергею Серову.
@@ -14894,7 +15569,7 @@ the "ip_hash" directive inside the "upstream" block.
 
 <change type="feature">
 <para lang="ru">
-статус WAIT в строке "Auth-Status" в заголовка ответа сервера аутентификации
+статус WAIT в строке "Auth-Status" в заголовке ответа сервера аутентификации
 IMAP/POP3 прокси.
 </para>
 <para lang="en">
@@ -19621,7 +20296,7 @@ then nginx started to request all backends again.
 
 <change type="change">
 <para lang="ru">
-если в заголовке запросе есть дублирующиеся строки "Host", "Connection",
+если в заголовке запроса есть дублирующиеся строки "Host", "Connection",
 "Content-Length" и "Authorization", то nginx теперь выдаёт ошибку 400.
 </para>
 <para lang="en">

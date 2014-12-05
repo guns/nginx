@@ -50,6 +50,7 @@
 #define NGX_HTTP_UPSTREAM_IGN_XA_LIMIT_RATE  0x00000040
 #define NGX_HTTP_UPSTREAM_IGN_XA_BUFFERING   0x00000080
 #define NGX_HTTP_UPSTREAM_IGN_XA_CHARSET     0x00000100
+#define NGX_HTTP_UPSTREAM_IGN_VARY           0x00000200
 
 
 typedef struct {
@@ -136,9 +137,11 @@ typedef struct {
     ngx_msec_t                       send_timeout;
     ngx_msec_t                       read_timeout;
     ngx_msec_t                       timeout;
+    ngx_msec_t                       next_upstream_timeout;
 
     size_t                           send_lowat;
     size_t                           buffer_size;
+    size_t                           limit_rate;
 
     size_t                           busy_buffers_size;
     size_t                           max_temp_file_size;
@@ -153,6 +156,7 @@ typedef struct {
     ngx_uint_t                       ignore_headers;
     ngx_uint_t                       next_upstream;
     ngx_uint_t                       store_access;
+    ngx_uint_t                       next_upstream_tries;
     ngx_flag_t                       buffering;
     ngx_flag_t                       pass_request_headers;
     ngx_flag_t                       pass_request_body;
@@ -160,6 +164,7 @@ typedef struct {
     ngx_flag_t                       ignore_client_abort;
     ngx_flag_t                       intercept_errors;
     ngx_flag_t                       cyclic_temp_file;
+    ngx_flag_t                       force_ranges;
 
     ngx_path_t                      *temp_path;
 
@@ -178,6 +183,7 @@ typedef struct {
 
     ngx_flag_t                       cache_lock;
     ngx_msec_t                       cache_lock_timeout;
+    ngx_msec_t                       cache_lock_age;
 
     ngx_flag_t                       cache_revalidate;
 
@@ -241,15 +247,17 @@ typedef struct {
     ngx_table_elt_t                 *accept_ranges;
     ngx_table_elt_t                 *www_authenticate;
     ngx_table_elt_t                 *transfer_encoding;
+    ngx_table_elt_t                 *vary;
 
 #if (NGX_HTTP_GZIP)
     ngx_table_elt_t                 *content_encoding;
 #endif
 
-    off_t                            content_length_n;
-
     ngx_array_t                      cache_control;
     ngx_array_t                      cookies;
+
+    off_t                            content_length_n;
+    time_t                           last_modified_time;
 
     unsigned                         connection_close:1;
     unsigned                         chunked:1;
