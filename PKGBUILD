@@ -12,6 +12,7 @@ depends=('pcre' 'zlib' 'openssl')
 provides=('nginx')
 conflicts=('nginx')
 backup=('etc/logrotate.d/nginx')
+install='nginx.install'
 
 pkgver() {
 	printf %s "$(git describe --long --tags | tr - .)"
