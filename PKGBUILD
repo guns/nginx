@@ -11,14 +11,19 @@ groups=('guns')
 depends=('pcre' 'zlib' 'openssl')
 provides=('nginx')
 conflicts=('nginx')
-backup=('etc/nginx/nginx.conf'
-        'etc/logrotate.d/nginx')
+backup=('etc/logrotate.d/nginx')
 
 pkgver() {
 	printf %s "$(git describe --long --tags | tr - .)"
 }
 
+build() {
+	cd "$startdir"
+	PREFIX='/usr' NGX_CONF_PREFIX='/etc/nginx' DESTDIR="$pkgdir/" JOBS=4 rake build
+}
+
 package() {
 	cd "$startdir"
-	PREFIX='/etc/nginx' DESTDIR="$pkgdir/" JOBS=4 rake install
+	PREFIX='/usr' NGX_CONF_PREFIX='/etc/nginx' DESTDIR="$pkgdir/" JOBS=4 rake install
+	install -Dm644 contrib/logrotate "$pkgdir"/etc/logrotate.d/nginx
 }

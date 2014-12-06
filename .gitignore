@@ -1,2 +1,4 @@
-/tmp
+/*.pkg.tar.xz*
 /nginx-*.tar.gz
+/pkg
+/tmp

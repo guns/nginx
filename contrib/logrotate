@@ -1,0 +1,20 @@
+#
+# Taken from Arch Linux's nginx package:
+#
+# Maintainer: Bartłomiej Piotrowski <bpiotrowski@archlinux.org>
+# Maintainer: Sébastien Luttringer
+# Contributor: Sergej Pupykin <pupykin.s+arch@gmail.com>
+# Contributor: Miroslaw Szot <mss@czlug.icis.pcz.pl>
+# Contributor: Daniel Micay <danielmicay@gmail.com>
+#
+
+/var/log/nginx/*log {
+	missingok
+	create 640 http log
+	su http log
+	sharedscripts
+	compress
+	postrotate
+		test ! -r /run/nginx.pid || kill -USR1 `cat /run/nginx.pid`
+	endscript
+}

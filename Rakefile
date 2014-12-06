@@ -10,6 +10,24 @@ def modules
   end
 end
 
+def num_processors
+  File.read('/proc/cpuinfo').lines.grep(/^processor/).size
+end
+
+def env
+  @env ||= {
+    :prefix => ENV['PREFIX'] || '/opt/nginx',
+    :ngx_conf_prefix => ENV['NGX_CONF_PREFIX'] || '/etc/nginx',
+    :destdir => ENV['DESTDIR'] || '',
+    :jobs => (ENV['JOBS'] || num_processors).to_i
+  }
+end
+
+def with_dir dir
+  mkdir_p dir
+  yield dir
+end
+
 task :default => :build
 
 desc 'Create Nginx release directory'
@@ -26,13 +44,11 @@ end
 desc 'Configure nginx'
 task :configure => [:release, :chdir] do
   # Following options reflect the order of ./configure --help
-  ngx_prefix = ENV['NGX_PREFIX'] || '/etc/nginx'
-  prefix = ENV['PREFIX'] || '/opt/nginx'
   cmd = [
     File.expand_path('configure'),
-    "--prefix=#{ngx_prefix}",
-    "--sbin-path=#{prefix}/sbin/nginx",
-    "--conf-path=#{ngx_prefix}/nginx.conf",
+    "--prefix=#{env[:ngx_conf_prefix]}",
+    "--sbin-path=#{env[:prefix]}/sbin/nginx",
+    "--conf-path=#{env[:ngx_conf_prefix]}/nginx.conf",
     "--error-log-path=/var/log/nginx/error.log",
     "--pid-path=/var/run/nginx.pid",
     "--lock-path=/var/lock/nginx.lock",
@@ -144,12 +160,42 @@ end
 desc 'Build Nginx'
 task :build => :chdir do
   Rake::Task[:configure].execute unless File.exists? 'Makefile'
-  sh 'make', '--jobs=%d' % (ENV['JOBS'] || 4).to_i
+  sh 'make', '--jobs=%d' % env[:jobs]
 end
 
 desc 'Install Nginx'
 task :install => :build do
-  system 'make install'
+  # Main executable
+  with_dir File.join(env[:destdir], env[:prefix], 'sbin') do |dir|
+    cp 'objs/nginx', dir
+  end
+
+  # Man page
+  with_dir File.join(env[:destdir], env[:prefix], 'share/man/man8') do |dir|
+    cp 'objs/nginx.8', dir
+  end
+
+  # Default configuration files
+  with_dir File.join(env[:destdir], env[:ngx_conf_prefix], 'default') do |dir|
+    Dir['conf/*'].each do |conf|
+      cp conf, dir
+    end
+  end
+
+  # Systemd unit file
+  with_dir File.join(env[:destdir], env[:prefix], 'lib/systemd/system') do |dir|
+    cp 'objs/nginx.service', dir
+  end
+
+  # Run control file
+  with_dir File.join(env[:destdir], env[:prefix], 'share/nginx/rc.d') do |dir|
+    cp 'objs/nginx.rc', dir
+  end
+
+  # HTML
+  with_dir File.join(env[:destdir], env[:prefix], 'share/nginx') do |dir|
+    cp_r 'html', dir
+  end
 end
 
 desc 'Upgrade Nginx'
