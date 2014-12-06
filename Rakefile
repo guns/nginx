@@ -196,6 +196,9 @@ task :install => :build do
   with_dir File.join(env[:destdir], env[:prefix], 'share/nginx') do |dir|
     cp_r 'html', dir
   end
+
+  # Create directories
+  sh 'bash', '-c', 'mkdir -p %s/var/{log/nginx,lib/nginx}' % env[:destdir].shellescape
 end
 
 desc 'Upgrade Nginx'
