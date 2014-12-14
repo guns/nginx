@@ -198,7 +198,9 @@ task :install => :build do
   end
 
   # Create directories
-  sh 'bash', '-c', 'mkdir -p %s/var/{log/nginx,lib/nginx}' % env[:destdir].shellescape
+  %w[log/nginx lib/nginx].each do |dir|
+    mkdir_p File.join(env[:destdir], 'var', dir)
+  end
 end
 
 desc 'Upgrade Nginx'
