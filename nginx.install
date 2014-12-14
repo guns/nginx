@@ -2,3 +2,7 @@ post_install() {
     chmod 750 var/log/nginx
     chown http:log var/log/nginx
 }
+
+post_upgrade() {
+    post_install
+}
