@@ -1,16 +1,17 @@
 # Maintainer: guns <self@sungpae.com>
 
-pkgname=nginx-guns
+pkgname=nginx-nerv
 pkgver=
 pkgrel=1
-pkgdesc="Sung Pae's nginx build"
+pkgdesc="Custom nginx build"
 arch=('i686' 'x86_64')
 url='http://nginx.org'
 license=('custom')
-groups=('guns')
+groups=('nerv')
 depends=('pcre' 'zlib' 'openssl')
 provides=('nginx')
 conflicts=('nginx')
+replaces=('nginx-guns')
 backup=('etc/logrotate.d/nginx')
 install='nginx.install'
 
