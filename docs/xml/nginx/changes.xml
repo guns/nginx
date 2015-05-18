@@ -5,6 +5,407 @@
 <change_log title="nginx">
 
 
+<changes ver="1.9.0" date="28.04.2015">
+
+<change type="change">
+<para lang="ru">
+устаревшие методы обработки соединений aio и rtsig больше не поддерживаются.
+</para>
+<para lang="en">
+obsolete aio and rtsig event methods have been removed.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директива zone в блоке upstream.
+</para>
+<para lang="en">
+the "zone" directive inside the "upstream" block.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+модуль stream.
+</para>
+<para lang="en">
+the stream module.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+поддержка byte ranges для ответов модуля ngx_http_memcached_module.<br/>
+Спасибо Martin Mlynář.
+</para>
+<para lang="en">
+byte ranges support in the ngx_http_memcached_module.<br/>
+Thanks to Martin Mlynář.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+разделяемую память теперь можно использовать на версиях Windows
+с рандомизацией адресного пространства.<br/>
+Спасибо Сергею Брестеру.
+</para>
+<para lang="en">
+shared memory can now be used on Windows versions
+with address space layout randomization.<br/>
+Thanks to Sergey Brester.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директиву error_log теперь можно использовать
+на уровнях mail и server в почтовом прокси-сервере.
+</para>
+<para lang="en">
+the "error_log" directive can now be used
+on mail and server levels in mail proxy.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+параметр proxy_protocol директивы listen не работал,
+если не был указан в первой директиве listen для данного listen-сокета.
+</para>
+<para lang="en">
+the "proxy_protocol" parameter of the "listen" directive did not work
+if not specified in the first "listen" directive for a listen socket.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.12" date="07.04.2015">
+
+<change type="feature">
+<para lang="ru">
+теперь директива tcp_nodelay работает для SSL-соединений с бэкендами.
+</para>
+<para lang="en">
+now the "tcp_nodelay" directive works with backend SSL connections.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+теперь потоки могут использоваться для чтения заголовков файлов в кэше.
+</para>
+<para lang="en">
+now thread pools can be used to read cache file headers.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в директиве proxy_request_buffering.
+</para>
+<para lang="en">
+in the "proxy_request_buffering" directive.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при использовании потоков на Linux
+в рабочем процессе мог произойти segmentation fault.
+</para>
+<para lang="en">
+a segmentation fault might occur in a worker process
+when using thread pools on Linux.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в обработке ошибок при использовании директивы ssl_stapling.<br/>
+Спасибо Filipe da Silva.
+</para>
+<para lang="en">
+in error handling when using the "ssl_stapling" directive.<br/>
+Thanks to Filipe da Silva.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в модуле ngx_http_spdy_module.
+</para>
+<para lang="en">
+in the ngx_http_spdy_module.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.11" date="24.03.2015">
+
+<change type="change">
+<para lang="ru">
+параметр sendfile директивы aio более не нужен;
+теперь nginx автоматически использует AIO для подгрузки данных для sendfile,
+если одновременно используются директивы aio и sendfile.
+</para>
+<para lang="en">
+the "sendfile" parameter of the "aio" directive is deprecated;
+now nginx automatically uses AIO to pre-load data for sendfile
+if both "aio" and "sendfile" directives are used.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+экспериментальная поддержка потоков.
+</para>
+<para lang="en">
+experimental thread pools support.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+директивы proxy_request_buffering, fastcgi_request_buffering,
+scgi_request_buffering и uwsgi_request_buffering.
+</para>
+<para lang="en">
+the "proxy_request_buffering", "fastcgi_request_buffering",
+"scgi_request_buffering", and "uwsgi_request_buffering" directives.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+экспериментальное API для обработки тела запроса.
+</para>
+<para lang="en">
+request body filters experimental API.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+проверка клиентских SSL-сертификатов в почтовом прокси-сервере.<br/>
+Спасибо Sven Peter, Franck Levionnois и Filipe Da Silva.
+</para>
+<para lang="en">
+client SSL certificates support in mail proxy.<br/>
+Thanks to Sven Peter, Franck Levionnois, and Filipe Da Silva.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+уменьшение времени запуска
+при использовании дирекивы "hash ... consistent" в блоке upstream.<br/>
+Спасибо Wai Keen Woon.
+</para>
+<para lang="en">
+startup speedup
+when using the "hash ... consistent" directive in the upstream block.<br/>
+Thanks to Wai Keen Woon.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+отладочное логгирование в кольцевой буфер в памяти.
+</para>
+<para lang="en">
+debug logging into a cyclic memory buffer.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в обработке хэш-таблиц.<br/>
+Спасибо Chris West.
+</para>
+<para lang="en">
+in hash table handling.<br/>
+Thanks to Chris West.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в директиве proxy_cache_revalidate.
+</para>
+<para lang="en">
+in the "proxy_cache_revalidate" directive.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+SSL-соединения могли зависать, если использовался отложенный accept
+или параметр proxy_protocol директивы listen.<br/>
+Спасибо James Hamlin.
+</para>
+<para lang="en">
+SSL connections might hang if deferred accept
+or the "proxy_protocol" parameter of the "listen" directive were used.<br/>
+Thanks to James Hamlin.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+переменная $upstream_response_time могла содержать неверное значение
+при использовании директивы image_filter.
+</para>
+<para lang="en">
+the $upstream_response_time variable might contain a wrong value
+if the "image_filter" directive was used.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в обработке целочисленных переполнений.<br/>
+Спасибо Régis Leroy.
+</para>
+<para lang="en">
+in integer overflow handling.<br/>
+Thanks to Régis Leroy.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при использовании LibreSSL было невозможно включить поддержку SSLv3.
+</para>
+<para lang="en">
+it was not possible to enable SSLv3 with LibreSSL.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при использовании LibreSSL в логах появлялись сообщения
+"ignoring stale global SSL error ... called a function you should not call".
+</para>
+<para lang="en">
+the "ignoring stale global SSL error ... called a function you should not call"
+alerts appeared in logs when using LibreSSL.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+сертификаты, указанные в директивах ssl_client_certificate и
+ssl_trusted_certificate, использовались
+для автоматического построения цепочек сертификатов.
+</para>
+<para lang="en">
+certificates specified by the "ssl_client_certificate" and
+"ssl_trusted_certificate" directives were inadvertently used
+to automatically construct certificate chains.
+</para>
+</change>
+
+</changes>
+
+
+<changes ver="1.7.10" date="10.02.2015">
+
+<change type="feature">
+<para lang="ru">
+параметр use_temp_path директив proxy_cache_path, fastcgi_cache_path,
+scgi_cache_path и uwsgi_cache_path.
+</para>
+<para lang="en">
+the "use_temp_path" parameter of the "proxy_cache_path", "fastcgi_cache_path",
+"scgi_cache_path", and "uwsgi_cache_path" directives.
+</para>
+</change>
+
+<change type="feature">
+<para lang="ru">
+переменная $upstream_header_time.
+</para>
+<para lang="en">
+the $upstream_header_time variable.
+</para>
+</change>
+
+<change type="workaround">
+<para lang="ru">
+теперь при переполнении диска nginx пытается писать error_log'и только
+раз в секунду.
+</para>
+<para lang="en">
+now on disk overflow nginx tries to write error logs once a second only.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+директива try_files при тестировании каталогов
+не игнорировала обычные файлы.<br/>
+Спасибо Damien Tournoud.
+</para>
+<para lang="en">
+the "try_files" directive did not ignore normal files
+while testing directories.<br/>
+Thanks to Damien Tournoud.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+при использовании директивы sendfile на OS X
+возникали ошибки "sendfile() failed";
+ошибка появилась в nginx 1.7.8.
+</para>
+<para lang="en">
+alerts "sendfile() failed"
+if the "sendfile" directive was used on OS X;
+the bug had appeared in 1.7.8.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+в лог могли писаться сообщения "sem_post() failed".
+</para>
+<para lang="en">
+alerts "sem_post() failed" might appear in logs.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+nginx не собирался с musl libc.<br/>
+Спасибо James Taylor.
+</para>
+<para lang="en">
+nginx could not be built with musl libc.<br/>
+Thanks to James Taylor.
+</para>
+</change>
+
+<change type="bugfix">
+<para lang="ru">
+nginx не собирался на Tru64 UNIX.<br/>
+Спасибо Goetz T. Fischer.
+</para>
+<para lang="en">
+nginx could not be built on Tru64 UNIX.<br/>
+Thanks to Goetz T. Fischer.
+</para>
+</change>
+
+</changes>
+
+
 <changes ver="1.7.9" date="23.12.2014">
 
 <change type="feature">
@@ -84,7 +485,7 @@ might not work correctly inside the "if" and "limit_except" blocks.
 
 <change type="bugfix">
 <para lang="ru">
-директива proxy_store с параметром "on" игнорировалась, 
+директива proxy_store с параметром "on" игнорировалась,
 если на предыдущем уровне использовалась директива proxy_store
 с явно заданным путём к файлам.
 </para>

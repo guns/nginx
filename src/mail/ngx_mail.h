@@ -139,6 +139,7 @@ typedef struct {
     ngx_int_t               line;
 
     ngx_resolver_t         *resolver;
+    ngx_log_t              *error_log;
 
     /* server ctx */
     ngx_mail_conf_ctx_t    *ctx;
@@ -336,6 +337,8 @@ struct ngx_mail_protocol_s {
     ngx_mail_auth_state_pt      auth_state;
 
     ngx_str_t                   internal_server_error;
+    ngx_str_t                   cert_error;
+    ngx_str_t                   no_cert;
 };
 
 

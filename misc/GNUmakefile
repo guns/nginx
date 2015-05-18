@@ -5,7 +5,7 @@ NGINX =		nginx-$(VER)
 TEMP =		tmp
 
 OBJS =		objs.msvc8
-OPENSSL =	openssl-1.0.1j
+OPENSSL =	openssl-1.0.1m
 ZLIB =		zlib-1.2.8
 PCRE =		pcre-8.35
 
@@ -81,10 +81,12 @@ win32:
 		--with-http_random_index_module				\
 		--with-http_secure_link_module				\
 		--with-mail						\
+		--with-stream						\
 		--with-openssl=$(OBJS)/lib/$(OPENSSL)			\
 		--with-openssl-opt=enable-tlsext			\
 		--with-http_ssl_module					\
 		--with-mail_ssl_module					\
+		--with-stream_ssl_module				\
 		--with-ipv6
 
 

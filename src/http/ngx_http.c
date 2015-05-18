@@ -69,8 +69,9 @@ static ngx_int_t ngx_http_add_addrs6(ngx_conf_t *cf, ngx_http_port_t *hport,
 ngx_uint_t   ngx_http_max_module;
 
 
-ngx_int_t  (*ngx_http_top_header_filter) (ngx_http_request_t *r);
-ngx_int_t  (*ngx_http_top_body_filter) (ngx_http_request_t *r, ngx_chain_t *ch);
+ngx_http_output_header_filter_pt  ngx_http_top_header_filter;
+ngx_http_output_body_filter_pt    ngx_http_top_body_filter;
+ngx_http_request_body_filter_pt   ngx_http_top_request_body_filter;
 
 
 ngx_str_t  ngx_http_html_default_types[] = {
@@ -1219,7 +1220,7 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
 {
     u_char                *p;
     size_t                 len, off;
-    ngx_uint_t             i, default_server;
+    ngx_uint_t             i, default_server, proxy_protocol;
     struct sockaddr       *sa;
     ngx_http_conf_addr_t  *addr;
 #if (NGX_HAVE_UNIX_DOMAIN)
@@ -1280,6 +1281,8 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
         /* preserve default_server bit during listen options overwriting */
         default_server = addr[i].opt.default_server;
 
+        proxy_protocol = lsopt->proxy_protocol || addr[i].opt.proxy_protocol;
+
 #if (NGX_HTTP_SSL)
         ssl = lsopt->ssl || addr[i].opt.ssl;
 #endif
@@ -1313,6 +1316,7 @@ ngx_http_add_addresses(ngx_conf_t *cf, ngx_http_core_srv_conf_t *cscf,
         }
 
         addr[i].opt.default_server = default_server;
+        addr[i].opt.proxy_protocol = proxy_protocol;
 #if (NGX_HTTP_SSL)
         addr[i].opt.ssl = ssl;
 #endif

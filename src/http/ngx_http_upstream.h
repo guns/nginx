@@ -60,6 +60,8 @@ typedef struct {
     ngx_uint_t                       status;
     time_t                           response_sec;
     ngx_uint_t                       response_msec;
+    time_t                           header_sec;
+    ngx_uint_t                       header_msec;
     off_t                            response_length;
 
     ngx_str_t                       *peer;
@@ -121,6 +123,10 @@ struct ngx_http_upstream_srv_conf_s {
     in_port_t                        port;
     in_port_t                        default_port;
     ngx_uint_t                       no_port;  /* unsigned no_port:1 */
+
+#if (NGX_HTTP_UPSTREAM_ZONE)
+    ngx_shm_zone_t                  *shm_zone;
+#endif
 };
 
 
@@ -158,6 +164,7 @@ typedef struct {
     ngx_uint_t                       store_access;
     ngx_uint_t                       next_upstream_tries;
     ngx_flag_t                       buffering;
+    ngx_flag_t                       request_buffering;
     ngx_flag_t                       pass_request_headers;
     ngx_flag_t                       pass_request_body;
 

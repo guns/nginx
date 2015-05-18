@@ -91,6 +91,10 @@ struct ngx_http_cache_s {
     ngx_http_file_cache_t           *file_cache;
     ngx_http_file_cache_node_t      *node;
 
+#if (NGX_THREADS)
+    ngx_thread_task_t               *thread_task;
+#endif
+
     ngx_msec_t                       lock_timeout;
     ngx_msec_t                       lock_age;
     ngx_msec_t                       lock_time;
@@ -142,6 +146,7 @@ struct ngx_http_file_cache_s {
     ngx_slab_pool_t                 *shpool;
 
     ngx_path_t                      *path;
+    ngx_path_t                      *temp_path;
 
     off_t                            max_size;
     size_t                           bsize;
@@ -162,7 +167,7 @@ ngx_int_t ngx_http_file_cache_new(ngx_http_request_t *r);
 ngx_int_t ngx_http_file_cache_create(ngx_http_request_t *r);
 void ngx_http_file_cache_create_key(ngx_http_request_t *r);
 ngx_int_t ngx_http_file_cache_open(ngx_http_request_t *r);
-void ngx_http_file_cache_set_header(ngx_http_request_t *r, u_char *buf);
+ngx_int_t ngx_http_file_cache_set_header(ngx_http_request_t *r, u_char *buf);
 void ngx_http_file_cache_update(ngx_http_request_t *r, ngx_temp_file_t *tf);
 void ngx_http_file_cache_update_header(ngx_http_request_t *r);
 ngx_int_t ngx_http_cache_send(ngx_http_request_t *);
