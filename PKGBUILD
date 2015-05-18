@@ -21,11 +21,11 @@ pkgver() {
 
 build() {
 	cd "$startdir"
-	PREFIX='/usr' NGX_CONF_PREFIX='/etc/nginx' DESTDIR="$pkgdir/" JOBS=4 rake build
+	PREFIX='/usr' NGX_CONF_PREFIX='/etc/nginx' DESTDIR="$pkgdir/" rake build
 }
 
 package() {
 	cd "$startdir"
-	PREFIX='/usr' NGX_CONF_PREFIX='/etc/nginx' DESTDIR="$pkgdir/" JOBS=4 rake install
+	PREFIX='/usr' NGX_CONF_PREFIX='/etc/nginx' DESTDIR="$pkgdir/" rake install
 	install -Dm644 contrib/logrotate "$pkgdir"/etc/logrotate.d/nginx
 }

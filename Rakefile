@@ -47,7 +47,7 @@ task :configure => [:release, :chdir] do
   cmd = [
     File.expand_path('configure'),
     "--prefix=#{env[:ngx_conf_prefix]}",
-    "--sbin-path=#{env[:prefix]}/sbin/nginx",
+    "--sbin-path=#{env[:prefix]}/bin/nginx",
     "--conf-path=#{env[:ngx_conf_prefix]}/nginx.conf",
     "--error-log-path=/var/log/nginx/error.log",
     "--pid-path=/var/run/nginx.pid",
@@ -61,6 +61,7 @@ task :configure => [:release, :chdir] do
     # "--without-select_module",
     # "--with-poll_module",
     # "--without-poll_module",
+    "--with-threads",
     "--with-file-aio",
     "--with-ipv6",
     "--with-http_ssl_module",
@@ -106,6 +107,7 @@ task :configure => [:release, :chdir] do
     "--without-http_upstream_ip_hash_module",
     "--without-http_upstream_least_conn_module",
     "--without-http_upstream_keepalive_module",
+    "--without-http_upstream_zone_module",
     # "--with-http_perl_module",
     # "--with-perl_modules_path=PATH",
     # "--with-perl=PATH",
@@ -122,6 +124,11 @@ task :configure => [:release, :chdir] do
     "--without-mail_pop3_module",
     "--without-mail_imap_module",
     "--without-mail_smtp_module",
+    # "--with-stream",
+    # "--with-stream_ssl_module",
+    "--without-stream_upstream_hash_module",
+    "--without-stream_upstream_least_conn_module",
+    "--without-stream_upstream_zone_module",
     # "--with-google_perftools_module",
     # "--with-cpp_test_module",
     # "--add-module=PATH",
@@ -166,7 +173,7 @@ end
 desc 'Install Nginx'
 task :install => :build do
   # Main executable
-  with_dir File.join(env[:destdir], env[:prefix], 'sbin') do |dir|
+  with_dir File.join(env[:destdir], env[:prefix], 'bin') do |dir|
     cp 'objs/nginx', dir
   end
 
