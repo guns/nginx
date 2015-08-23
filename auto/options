@@ -113,6 +113,8 @@ MAIL_SMTP=YES
 
 STREAM=NO
 STREAM_SSL=NO
+STREAM_LIMIT_CONN=YES
+STREAM_ACCESS=YES
 STREAM_UPSTREAM_HASH=YES
 STREAM_UPSTREAM_LEAST_CONN=YES
 STREAM_UPSTREAM_ZONE=YES
@@ -243,12 +245,6 @@ do
         --without-http_uwsgi_module)     HTTP_UWSGI=NO              ;;
         --without-http_scgi_module)      HTTP_SCGI=NO               ;;
         --without-http_memcached_module) HTTP_MEMCACHED=NO          ;;
-        --without-http_limit_zone_module)
-            HTTP_LIMIT_CONN=NO
-            NGX_POST_CONF_MSG="$NGX_POST_CONF_MSG
-$0: warning: the \"--without-http_limit_zone_module\" option is deprecated, \
-use the \"--without-http_limit_conn_module\" option instead"
-        ;;
         --without-http_limit_conn_module) HTTP_LIMIT_CONN=NO        ;;
         --without-http_limit_req_module) HTTP_LIMIT_REQ=NO         ;;
         --without-http_empty_gif_module) HTTP_EMPTY_GIF=NO          ;;
@@ -270,14 +266,27 @@ use the \"--without-http_limit_conn_module\" option instead"
         --with-mail)                     MAIL=YES                   ;;
         --with-mail_ssl_module)          MAIL_SSL=YES               ;;
         # STUB
-        --with-imap)                     MAIL=YES                   ;;
-        --with-imap_ssl_module)          MAIL_SSL=YES               ;;
+        --with-imap)
+            MAIL=YES
+            NGX_POST_CONF_MSG="$NGX_POST_CONF_MSG
+$0: warning: the \"--with-imap\" option is deprecated, \
+use the \"--with-mail\" option instead"
+        ;;
+        --with-imap_ssl_module)
+            MAIL_SSL=YES
+            NGX_POST_CONF_MSG="$NGX_POST_CONF_MSG
+$0: warning: the \"--with-imap_ssl_module\" option is deprecated, \
+use the \"--with-mail_ssl_module\" option instead"
+        ;;
         --without-mail_pop3_module)      MAIL_POP3=NO               ;;
         --without-mail_imap_module)      MAIL_IMAP=NO               ;;
         --without-mail_smtp_module)      MAIL_SMTP=NO               ;;
 
         --with-stream)                   STREAM=YES                 ;;
         --with-stream_ssl_module)        STREAM_SSL=YES             ;;
+        --without-stream_limit_conn_module)
+                                         STREAM_LIMIT_CONN=NO       ;;
+        --without-stream_access_module)  STREAM_ACCESS=NO           ;;
         --without-stream_upstream_hash_module)
                                          STREAM_UPSTREAM_HASH=NO    ;;
         --without-stream_upstream_least_conn_module)
@@ -446,6 +455,8 @@ cat << END
 
   --with-stream                      enable TCP proxy module
   --with-stream_ssl_module           enable ngx_stream_ssl_module
+  --without-stream_limit_conn_module disable ngx_stream_limit_conn_module
+  --without-stream_access_module     disable ngx_stream_access_module
   --without-stream_upstream_hash_module
                                      disable ngx_stream_upstream_hash_module
   --without-stream_upstream_least_conn_module
@@ -518,6 +529,7 @@ if [ ".$NGX_PLATFORM" = ".win32" ]; then
 fi
 
 
+NGX_SBIN_PATH=${NGX_SBIN_PATH:-sbin/nginx}
 NGX_CONF_PATH=${NGX_CONF_PATH:-conf/nginx.conf}
 NGX_CONF_PREFIX=`dirname $NGX_CONF_PATH`
 NGX_PID_PATH=${NGX_PID_PATH:-logs/nginx.pid}
