@@ -5,9 +5,7 @@ def version
 end
 
 def modules
-  Dir[File.expand_path '../modules/*', __FILE__].select do |m|
-    File.exists? File.join(m, 'config')
-  end
+  %w[]
 end
 
 def num_processors
@@ -65,7 +63,7 @@ task :configure => [:release, :chdir] do
     "--with-file-aio",
     "--with-ipv6",
     "--with-http_ssl_module",
-    "--with-http_spdy_module",
+    "--with-http_v2_module",
     "--with-http_realip_module",
     "--with-http_addition_module",
     # "--with-http_xslt_module",
@@ -126,6 +124,8 @@ task :configure => [:release, :chdir] do
     "--without-mail_smtp_module",
     # "--with-stream",
     # "--with-stream_ssl_module",
+    # "--without-stream_limit_conn_module"
+    # "--without-stream_access_module"
     "--without-stream_upstream_hash_module",
     "--without-stream_upstream_least_conn_module",
     "--without-stream_upstream_zone_module",
