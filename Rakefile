@@ -5,7 +5,7 @@ def version
 end
 
 def modules
-  %w[]
+  ENV['MODULES'] || []
 end
 
 def num_processors
