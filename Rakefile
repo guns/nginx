@@ -5,7 +5,11 @@ def version
 end
 
 def modules
-  ENV['MODULES'] || []
+  return [] if ENV['NOMODULES'] == '1'
+
+  Dir[File.expand_path '../modules/*', __FILE__].select do |m|
+    File.exists? File.join(m, 'config')
+  end
 end
 
 def num_processors
